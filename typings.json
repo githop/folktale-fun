@@ -1,5 +1,8 @@
 {
   "globalDependencies": {
     "node": "registry:dt/node#6.0.0+20160720070758"
+  },
+  "dependencies": {
+    "ramda": "registry:npm/ramda#0.21.0+20160531162943"
   }
 }
