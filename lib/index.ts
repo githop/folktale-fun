@@ -1,16 +1,12 @@
 const fs = require('fs');
+const {join: pjoin} = require('path');
 const Task = require('data.task');
-// const {sequence, liftMN} = require('control.monads');
-// const {add} = require('core.operators');
+const {sequence, map, toUpper} = require('ramda');
 
-const {add, liftN, sequence, map, compose, join, toUpper, unnest} = require('ramda');
-
-const PATH = '/Users/githop/dev/js/typescript-node/';
-
+const filePath = (file) => (pjoin(__dirname, '../', file));
 const logErr = err => console.log(`Error: ${err}`);
 const logData = data => console.log('Data', data);
 const existy = x => x != null;
-
 
 const taskifyReadFs = (path) => {
   return new Task((reject, resolve) => {
@@ -18,16 +14,10 @@ const taskifyReadFs = (path) => {
   });
 };
 
-// let a = taskifyReadFs(PATH + 'a.txt');
-// let b = taskifyReadFs(PATH + 'b.txt');
-// let c = taskifyReadFs(PATH + 'c.txt');
-
-const paths = [PATH + 'a.txt', PATH + 'b.txt', PATH + 'c.txt'];
-
+const fNames = ['a.txt', 'b.txt', 'c.txt'];
+const paths = map(filePath, fNames);
 const files = map(taskifyReadFs, paths);
 const seqd = sequence(Task.of, files);
 const done = map(map(toUpper), seqd);
-
-
 
 done.fork(logErr, logData);
