@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {join: pjoin} = require('path');
 const Task = require('data.task');
-const {sequence, map, toUpper} = require('ramda');
+const {sequence, map, toUpper, compose} = require('ramda');
 
 const filePath = (file) => (pjoin(__dirname, '../', file));
 const logErr = err => console.log(`Error: ${err}`);
@@ -15,9 +15,10 @@ const taskifyReadFile = (path) => {
 };
 
 const fNames = ['a.txt', 'b.txt', 'c.txt'];
-const paths = map(filePath, fNames);
-const files = map(taskifyReadFile, paths);
-const seqd = sequence(Task.of, files);
+
+const composeIt = compose(map(taskifyReadFile), map(filePath));
+const filesRead = composeIt(fNames);
+const seqd = sequence(Task.of, filesRead);
 const done = map(map(toUpper), seqd);
 
 done.fork(logErr, logData);
