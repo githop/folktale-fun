@@ -24,7 +24,7 @@ const taskifyReq = (url) => {
 };
 
 const getFilesAsTasks = compose(map(taskifyReadFile), map(filePath));
-const getSkywalker = taskifyReq('http://swapi.co/api/people/1').map(prop('name'));
+const getSkywalker = map(prop('name'), taskifyReq('http://swapi.co/api/people/1'));
 const files = getFilesAsTasks(['a.txt', 'b.txt', 'c.txt']);
 const seq = sequence(Task.of, append(getSkywalker, files));
 const done = map(map(toUpper), seq);
