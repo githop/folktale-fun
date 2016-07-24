@@ -8,7 +8,7 @@ const logErr = err => console.log(`Error: ${err}`);
 const logData = data => console.log('Data', data);
 const existy = x => x != null;
 
-const taskifyReadFs = (path) => {
+const taskifyReadFile = (path) => {
   return new Task((reject, resolve) => {
     fs.readFile(path, 'utf8', (err, data) => existy(err) ? reject(err) : resolve(data));
   });
@@ -16,7 +16,7 @@ const taskifyReadFs = (path) => {
 
 const fNames = ['a.txt', 'b.txt', 'c.txt'];
 const paths = map(filePath, fNames);
-const files = map(taskifyReadFs, paths);
+const files = map(taskifyReadFile, paths);
 const seqd = sequence(Task.of, files);
 const done = map(map(toUpper), seqd);
 
